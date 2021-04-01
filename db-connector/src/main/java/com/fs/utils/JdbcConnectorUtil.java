@@ -26,7 +26,7 @@ public class JdbcConnectorUtil {
         InputStream in = null;
         try {
             prop = new Properties();
-            in = JdbcSinkUtil.class.getClassLoader().getResourceAsStream(CONFIG_FILE_PATH);
+            in = JdbcConnectorUtil.class.getClassLoader().getResourceAsStream(CONFIG_FILE_PATH);
             prop.load(in);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
