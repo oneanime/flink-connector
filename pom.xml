@@ -10,11 +10,9 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>restapi-source</module>
-        <module>db-sink</module>
         <module>kafka-connector</module>
         <module>test</module>
         <module>common</module>
-        <module>db-source</module>
         <module>db-connector</module>
     </modules>
 

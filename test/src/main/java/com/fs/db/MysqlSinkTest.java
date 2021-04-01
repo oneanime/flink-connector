@@ -1,8 +1,8 @@
 package com.fs.db;
 
+import com.fs.db.sink.JdbcSinkUtil;
 import com.fs.utils.TestSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
-
 public class MysqlSinkTest {
     public static void main(String[] args) throws Exception {
 
