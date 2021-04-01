@@ -8,7 +8,7 @@ public class MysqlSinkTest {
 
         SingleOutputStreamOperator restSource = TestSource.restSource();
         restSource.print();
-        restSource.addSink(JdbcSinkUtils.getMysqlSink("insert into user_action_info(user_id, item_id, category, behavior, ts) values (?,?,?,?,?)"));
+        restSource.addSink(JdbcSinkUtil.getMysqlSink("insert into user_action_info(user_id, item_id, category, behavior, ts) values (?,?,?,?,?)"));
 
         restSource.getExecutionEnvironment().execute();
 

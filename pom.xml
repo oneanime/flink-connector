@@ -10,22 +10,44 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>restapi-source</module>
-        <module>mysql-sink</module>
         <module>db-sink</module>
         <module>kafka-connector</module>
         <module>test</module>
         <module>common</module>
+        <module>db-source</module>
+        <module>db-connector</module>
     </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <flink.version>1.12.2</flink.version>
+        <mysql.version>5.1.49</mysql.version>
+        <phoenix.version>5.1.0</phoenix.version>
     </properties>
 
 
     <dependencyManagement>
         <dependencies>
+<!--            driver-->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.phoenix</groupId>
+                <artifactId>phoenix-core</artifactId>
+                <version>${phoenix.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-connector-jdbc_2.12</artifactId>
+                <version>${flink.version}</version>
+                <!--            <scope>provided</scope>-->
+            </dependency>
+
             <dependency>
                 <groupId>org.apache.flink</groupId>
                 <artifactId>flink-java</artifactId>

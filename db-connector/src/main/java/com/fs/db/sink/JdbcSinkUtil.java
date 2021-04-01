@@ -1,4 +1,4 @@
-package com.fs.db;
+package com.fs.db.sink;
 
 import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
 import org.apache.flink.connector.jdbc.JdbcExecutionOptions;
@@ -18,7 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class JdbcSinkUtils {
+public class JdbcSinkUtil {
     private static Properties prop = null;
     private static final String CONFIG_FILE_PATH = "jdbc.properties";
 
@@ -26,7 +26,7 @@ public class JdbcSinkUtils {
         InputStream in = null;
         try {
             prop = new Properties();
-            in = JdbcSinkUtils.class.getClassLoader().getResourceAsStream(CONFIG_FILE_PATH);
+            in = JdbcSinkUtil.class.getClassLoader().getResourceAsStream(CONFIG_FILE_PATH);
             prop.load(in);
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -9,27 +9,22 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>db-sink</artifactId>
+    <artifactId>db-connector</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <mysql.version>5.1.49</mysql.version>
-        <phoenix.version>5.1.0</phoenix.version>
     </properties>
     <dependencies>
 
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-jdbc_2.12</artifactId>
-            <version>1.12.2</version>
-            <!--            <scope>provided</scope>-->
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
         </dependency>
 
         <dependency>
