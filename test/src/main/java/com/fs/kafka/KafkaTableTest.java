@@ -1,6 +1,5 @@
 package com.fs.kafka;
 
-import com.fs.bean.UserActionInfo;
 import com.fs.utils.KafkaUtil;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
@@ -12,6 +11,7 @@ public class KafkaTableTest {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
+
 
         String options = ",'json.fail-on-missing-field' = 'false',\n" +
                 " 'json.ignore-parse-errors' = 'true'";
