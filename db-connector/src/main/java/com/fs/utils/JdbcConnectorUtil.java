@@ -1,9 +1,12 @@
 package com.fs.utils;
 
-import com.fs.db.sink.JdbcSinkUtil;
+import com.fs.db.format.JdbcSourceFormat;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.RowTypeInfo;
-import org.apache.flink.connector.jdbc.*;
+import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
+import org.apache.flink.connector.jdbc.JdbcExecutionOptions;
+import org.apache.flink.connector.jdbc.JdbcSink;
+import org.apache.flink.connector.jdbc.JdbcStatementBuilder;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JavaType;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,7 +24,7 @@ import java.util.Properties;
 
 public class JdbcConnectorUtil {
     private static Properties prop = null;
-    private static final String CONFIG_FILE_PATH = "jdbc.properties";
+    private static final String CONFIG_FILE_PATH = "config.properties";
 
     static {
         InputStream in = null;
@@ -81,11 +85,11 @@ public class JdbcConnectorUtil {
 
 /***********************source*********************************************/
 
-    public static JdbcInputFormat getJdbcSource(String url, String driver, String username, String password, String sql, TypeInformation[] fieldTypes, Boolean isAutoCommit) {
+    public static JdbcSourceFormat getJdbcSource(String url, String driver, String username, String password, String sql, TypeInformation[] fieldTypes, Boolean isAutoCommit) {
 
         RowTypeInfo rowTypeInfo = new RowTypeInfo(fieldTypes);
 
-        JdbcInputFormat jdbcInputFormat = JdbcInputFormat.buildJdbcInputFormat()
+        JdbcSourceFormat jdbcInputFormat = JdbcSourceFormat.buildJdbcSourceFormat()
                 .setDBUrl(url)
                 .setDrivername(driver)
                 .setUsername(username)
@@ -93,17 +97,18 @@ public class JdbcConnectorUtil {
                 .setQuery(sql)
                 .setRowTypeInfo(rowTypeInfo)
                 .setAutoCommit(isAutoCommit)
+                .setResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE)
                 .finish();
         return jdbcInputFormat;
     }
 
-    public static JdbcInputFormat getMysqlSource(String tableName,TypeInformation[] fieldTypes){
+    public static JdbcSourceFormat getMysqlSource(String tableName, TypeInformation[] fieldTypes){
         String mysqlUrl=prop.getProperty("mysql.url");
         String mysqlDriver = prop.getProperty("mysql.driver");
         String mysqlUserName = prop.getProperty("mysql.username");
         String mysqlPwd = prop.getProperty("mysql.password");
         String sql = String.format("select * from %s",tableName);
-        JdbcInputFormat mysqlSource = getJdbcSource(mysqlUrl, mysqlDriver, mysqlUserName, mysqlPwd, sql, fieldTypes, true);
+        JdbcSourceFormat mysqlSource = getJdbcSource(mysqlUrl, mysqlDriver, mysqlUserName, mysqlPwd, sql, fieldTypes, true);
         return mysqlSource;
     }
 
