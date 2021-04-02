@@ -3,10 +3,7 @@ package com.fs.utils;
 import com.fs.db.format.JdbcSourceFormat;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.RowTypeInfo;
-import org.apache.flink.connector.jdbc.JdbcConnectionOptions;
-import org.apache.flink.connector.jdbc.JdbcExecutionOptions;
-import org.apache.flink.connector.jdbc.JdbcSink;
-import org.apache.flink.connector.jdbc.JdbcStatementBuilder;
+import org.apache.flink.connector.jdbc.*;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.JavaType;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.databind.ObjectMapper;
@@ -85,11 +82,11 @@ public class JdbcConnectorUtil {
 
 /***********************source*********************************************/
 
-    public static JdbcSourceFormat getJdbcSource(String url, String driver, String username, String password, String sql, TypeInformation[] fieldTypes, Boolean isAutoCommit) {
+    public static JdbcInputFormat getJdbcSource(String url, String driver, String username, String password, String sql, TypeInformation[] fieldTypes, Boolean isAutoCommit) {
 
         RowTypeInfo rowTypeInfo = new RowTypeInfo(fieldTypes);
 
-        JdbcSourceFormat jdbcInputFormat = JdbcSourceFormat.buildJdbcSourceFormat()
+        JdbcInputFormat jdbcInputFormat = JdbcInputFormat.buildJdbcInputFormat()
                 .setDBUrl(url)
                 .setDrivername(driver)
                 .setUsername(username)
@@ -102,13 +99,13 @@ public class JdbcConnectorUtil {
         return jdbcInputFormat;
     }
 
-    public static JdbcSourceFormat getMysqlSource(String tableName, TypeInformation[] fieldTypes){
+    public static JdbcInputFormat getMysqlSource(String tableName, TypeInformation[] fieldTypes){
         String mysqlUrl=prop.getProperty("mysql.url");
         String mysqlDriver = prop.getProperty("mysql.driver");
         String mysqlUserName = prop.getProperty("mysql.username");
         String mysqlPwd = prop.getProperty("mysql.password");
         String sql = String.format("select * from %s",tableName);
-        JdbcSourceFormat mysqlSource = getJdbcSource(mysqlUrl, mysqlDriver, mysqlUserName, mysqlPwd, sql, fieldTypes, true);
+        JdbcInputFormat mysqlSource = getJdbcSource(mysqlUrl, mysqlDriver, mysqlUserName, mysqlPwd, sql, fieldTypes, true);
         return mysqlSource;
     }
 

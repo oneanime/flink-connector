@@ -20,6 +20,9 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.Arrays;
 
+/**
+ * 该类和JdbcInputFormat基本相同，不同点在于可以获取类中的变量，如PreparedStatement、ResultSet的变量
+ */
 public class JdbcSourceFormat extends RichInputFormat<Row, InputSplit>
         implements ResultTypeQueryable<Row>{
 

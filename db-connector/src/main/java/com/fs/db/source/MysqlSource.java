@@ -1,10 +1,9 @@
 package com.fs.db.source;
 
-import com.fs.db.format.JdbcSourceFormat;
 import com.fs.utils.JdbcConnectorUtil;
-import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.connector.jdbc.JdbcInputFormat;
 import org.apache.flink.streaming.api.functions.source.RichParallelSourceFunction;
 import org.apache.flink.types.Row;
 
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MysqlSource extends RichParallelSourceFunction<List<Row>> {
-    protected JdbcSourceFormat jdbcSourceFormat = null;
+    protected JdbcInputFormat jdbcInputFormat = null;
     protected Boolean running = true;
     protected long delay;
     protected TypeInformation[] typeInformation;
@@ -26,30 +25,31 @@ public class MysqlSource extends RichParallelSourceFunction<List<Row>> {
 
     @Override
     public void open(Configuration parameters) throws Exception {
-        jdbcSourceFormat = JdbcConnectorUtil.getMysqlSource(tableName, typeInformation);
-        jdbcSourceFormat.openInputFormat();
-        jdbcSourceFormat.open(null);
+        jdbcInputFormat = JdbcConnectorUtil.getMysqlSource(tableName, typeInformation);
+        jdbcInputFormat.openInputFormat();
     }
 
     @Override
     public void run(SourceContext<List<Row>> ctx) throws Exception {
         while (running) {
+
+            // open()方法中会调用resultSet = statement.executeQuery();去查询数据库
+            jdbcInputFormat.open(null);
             ArrayList<Row> rows = new ArrayList<>();
-            while (!jdbcSourceFormat.reachedEnd()) {
-                Row row = jdbcSourceFormat.nextRecord(new Row(typeInformation.length));
+            while (!jdbcInputFormat.reachedEnd()) {
+                Row row = jdbcInputFormat.nextRecord(new Row(typeInformation.length));
                 rows.add(row);
             }
             ctx.collect(rows);
             rows.clear();
             Thread.sleep(delay);
-            jdbcSourceFormat.beforeFirst();
         }
     }
 
     @Override
     public void close() throws Exception {
-        jdbcSourceFormat.close();
-        jdbcSourceFormat.closeInputFormat();
+        jdbcInputFormat.close();
+        jdbcInputFormat.closeInputFormat();
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.fs.db.source;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.RowTypeInfo;
 import org.apache.flink.connector.jdbc.JdbcInputFormat;
-import org.apache.flink.connector.jdbc.split.JdbcGenericParameterValuesProvider;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,6 +48,7 @@ public class JdbcSourceUtil {
                 .setRowTypeInfo(rowTypeInfo)
                 .setAutoCommit(isAutoCommit)
                 .finish();
+
         return jdbcInputFormat;
     }
 
